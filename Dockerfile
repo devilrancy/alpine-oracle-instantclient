@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-glibc
+FROM python:2.7-alpine
 
 RUN apk update && apk add libaio
 
@@ -15,3 +15,11 @@ ENV ORACLE_BASE /usr/lib/instantclient_12_1
 ENV LD_LIBRARY_PATH /usr/lib/instantclient_12_1
 ENV TNS_ADMIN /usr/lib/instantclient_12_1
 ENV ORACLE_HOME /usr/lib/instantclient_12_1
+
+RUN pip install cx_Oracle
+
+RUN apk update \
+  && apk add --virtual build-deps gcc python3-dev musl-dev \
+  && apk add postgresql-dev \
+  && pip install psycopg2 \
+  && apk del build-deps
